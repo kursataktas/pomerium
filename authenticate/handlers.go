@@ -92,7 +92,6 @@ func (a *Authenticate) mountDashboard(r *mux.Router) {
 	sr.Path("/sign_out").Handler(httputil.HandlerFunc(a.SignOut))
 	sr.Path("/signed_out").Handler(httputil.HandlerFunc(a.signedOut)).Methods(http.MethodGet)
 	sr.Path("/device_auth").Handler(httputil.HandlerFunc(a.DeviceAuthLogin)).
-		Queries(urlutil.QueryDeviceAuthRouteURI, "").
 		Methods(http.MethodGet, http.MethodPost)
 
 	// routes that need a session:
@@ -557,7 +556,7 @@ func (a *Authenticate) getRetryTokenForRequest(r *http.Request) []byte {
 	if err := r.ParseForm(); err != nil {
 		return nil
 	}
-	dec, _ := base64.URLEncoding.DecodeString(r.Form.Get(urlutil.QueryDeviceAuthRetryToken))
+	dec, _ := base64.StdEncoding.DecodeString(r.Form.Get(urlutil.QueryDeviceAuthRetryToken))
 	return dec
 }
 
